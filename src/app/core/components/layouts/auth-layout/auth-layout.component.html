@@ -1,10 +1,51 @@
-<app-navbar></app-navbar>
-<main class="min-h-screen pt-24 pb-10 flex items-center justify-center bg-gray-50">
-    <router-outlet></router-outlet>
-</main>
+<div class="h-screen w-full flex flex-col lg:flex-row bg-white overflow-hidden">
+    <!-- Left Side: Visual / Branding (Hidden on mobile) -->
+    <div class="hidden lg:flex lg:w-1/2 relative overflow-hidden bg-primary items-center justify-center p-12">
+        <!-- Decorative background elements -->
+        <div class="absolute inset-0 bg-gradient-to-br from-primary-dark via-primary to-indigo-400 opacity-90"></div>
+        <div class="absolute top-[-10%] right-[-10%] w-96 h-96 bg-white/10 rounded-full blur-3xl"></div>
+        <div class="absolute bottom-[-10%] left-[-10%] w-96 h-96 bg-white/10 rounded-full blur-3xl"></div>
 
-@defer(on idle) {
-<app-footer></app-footer>
-}@placeholder {
-    <div class="h-20"></div>
-}
+        <div class="relative z-10 text-center max-w-lg">
+            <a routerLink="/" class="inline-block text-4xl font-bold text-white tracking-tight mb-12">
+                SleekShop
+            </a>
+            <h1 class="text-5xl font-bold text-white leading-tight mb-8">
+                Your Gateway to <span class="text-indigo-200">Premium</span> Lifestyle.
+            </h1>
+            <p class="text-indigo-100 text-lg leading-relaxed mb-12">
+                Join over 50,000+ happy customers and explore our handpicked collections of global brands.
+            </p>
+
+            <div class="grid grid-cols-3 gap-8 pt-12 border-t border-white/20">
+                <div class="text-center">
+                    <p class="text-2xl font-bold text-white">12K+</p>
+                    <p class="text-indigo-200 text-xs uppercase tracking-widest font-semibold mt-1">Products</p>
+                </div>
+                <div class="text-center">
+                    <p class="text-2xl font-bold text-white">200+</p>
+                    <p class="text-indigo-200 text-xs uppercase tracking-widest font-semibold mt-1">Brands</p>
+                </div>
+                <div class="text-center">
+                    <p class="text-2xl font-bold text-white">24/7</p>
+                    <p class="text-indigo-200 text-xs uppercase tracking-widest font-semibold mt-1">Support</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Right Side: Form Content -->
+    <div class="w-full lg:w-1/2 flex items-center justify-center p-8 sm:p-12 lg:p-24 bg-slate-50/30">
+        <div class="w-full max-w-md">
+            <!-- Mobile Header (Visible only on lg:hidden) -->
+            <div class="lg:hidden text-center mb-8">
+                <a routerLink="/"
+                    class="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary-dark to-primary">
+                    SleekShop
+                </a>
+            </div>
+
+            <router-outlet></router-outlet>
+        </div>
+    </div>
+</div>

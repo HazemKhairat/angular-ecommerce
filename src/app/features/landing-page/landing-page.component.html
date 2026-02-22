@@ -1,0 +1,205 @@
+<div class="relative overflow-hidden bg-white">
+    <!-- Hero Section -->
+    <section class="relative pt-16 pb-32 sm:pt-24 sm:pb-40 hero-gradient">
+        <div class="container mx-auto px-6 relative z-10">
+            <div class="lg:flex lg:items-center lg:gap-12">
+                <div class="lg:w-1/2 text-center lg:text-left">
+                    <span
+                        class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-primary-light/10 text-primary mb-6 animate-pulse">
+                        New Summer Collection 2026
+                    </span>
+                    <h1 class="text-5xl lg:text-7xl font-bold text-slate-900 tracking-tight leading-tight mb-8">
+                        Elevate Your <span
+                            class="bg-clip-text text-transparent bg-gradient-to-r from-primary to-indigo-400">Lifestyle</span>
+                        with Premium Picks.
+                    </h1>
+                    <p class="text-lg text-slate-500 max-w-2xl mx-auto lg:mx-0 mb-10 leading-relaxed">
+                        Discover a curated collection of world-class products designed to bring comfort, style, and
+                        innovation to your daily life.
+                    </p>
+                    <div class="flex flex-col sm:flex-row items-center gap-4 justify-center lg:justify-start">
+                        <a routerLink="/products"
+                            class="w-full sm:w-auto px-8 py-4 bg-primary text-white rounded-2xl font-semibold hover:bg-primary-dark transition-all shadow-lg shadow-primary/20 hover:scale-105">
+                            Shop Now
+                        </a>
+                        <a href="#categories"
+                            class="w-full sm:w-auto px-8 py-4 bg-white text-slate-700 border border-slate-200 rounded-2xl font-semibold hover:bg-slate-50 transition-all">
+                            Browse Categories
+                        </a>
+                    </div>
+
+                    <div
+                        class="mt-12 flex items-center justify-center lg:justify-start gap-8 opacity-60 grayscale hover:grayscale-0 transition-all duration-500">
+                        <span class="text-sm font-semibold tracking-widest uppercase text-slate-400">Trusted By</span>
+                        <div class="flex gap-6">
+                            <span class="font-bold text-slate-500 text-xl tracking-tighter">VOLT</span>
+                            <span class="font-bold text-slate-500 text-xl tracking-tighter">ZENITH</span>
+                            <span class="font-bold text-slate-500 text-xl tracking-tighter">AURA</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="hidden lg:block lg:w-1/2">
+                    <div class="relative animate-float">
+                        <div class="absolute inset-0 bg-primary/20 blur-3xl rounded-full"></div>
+                        <img src="https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?q=80&w=1200"
+                            alt="Hero Product"
+                            class="relative z-10 rounded-[2rem] shadow-2xl border-4 border-white transform rotate-3 hover:rotate-0 transition-transform duration-700">
+                        <!-- Floating cards -->
+                        <div
+                            class="absolute -bottom-6 -left-6 bg-white p-4 rounded-2xl shadow-xl z-20 animate-bounce transition-all">
+                            <div class="flex items-center gap-3">
+                                <div
+                                    class="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center text-green-600">
+                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <p class="text-xs text-slate-400 font-medium">Quality Verified</p>
+                                    <p class="text-sm font-bold text-slate-800">100% Authentic</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Special Stats -->
+    <div class="bg-slate-900 py-12">
+        <div class="container mx-auto px-6">
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-8 text-center">
+                <div>
+                    <p class="text-3xl lg:text-4xl font-bold text-white mb-1">50K+</p>
+                    <p class="text-slate-400 text-sm">Happy Customers</p>
+                </div>
+                <div>
+                    <p class="text-3xl lg:text-4xl font-bold text-white mb-1">{{ totalProducts() }}</p>
+                    <p class="text-slate-400 text-sm">Premium Products</p>
+                </div>
+                <div>
+                    <p class="text-3xl lg:text-4xl font-bold text-white mb-1">{{ totalBrands() }}</p>
+                    <p class="text-slate-400 text-sm">Active Brands</p>
+                </div>
+                <div>
+                    <p class="text-3xl lg:text-4xl font-bold text-white mb-1">{{ totalCategories() }}</p>
+                    <p class="text-slate-400 text-sm">Global Categories</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Featured Categories -->
+    <section id="categories" class="py-24 bg-slate-50">
+        <div class="container mx-auto px-6">
+            <div class="flex justify-between items-end mb-12">
+                <div>
+                    <h2 class="text-3xl lg:text-4xl font-bold text-slate-900 mb-4">Explore Collections</h2>
+                    <p class="text-slate-500">The most trendy categories selected just for you.</p>
+                </div>
+                <a routerLink="/categories" class="hidden sm:block text-primary font-semibold hover:underline group">
+                    View all categories
+                    <svg class="inline-block w-4 h-4 ml-1 transition-transform group-hover:translate-x-1" fill="none"
+                        stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                    </svg>
+                </a>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                @for(cat of categories(); track $index) {
+                <div [routerLink]="['/products']" [queryParams]="{category: cat._id}"
+                    class="group relative overflow-hidden rounded-3xl aspect-[4/5] cursor-pointer">
+                    <img [src]="cat.image" [alt]="cat.name"
+                        class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                    <div class="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-slate-900/20 to-transparent">
+                    </div>
+                    <div class="absolute bottom-0 left-0 p-8 w-full">
+                        <h3 class="text-2xl font-bold text-white mb-4">{{ cat.name }}</h3>
+                        <button
+                            class="bg-white/20 backdrop-blur-md text-white px-4 py-2 rounded-xl text-sm font-semibold opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">
+                            Explore More
+                        </button>
+                    </div>
+                </div>
+                }
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Products -->
+    <section class="py-24">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl lg:text-4xl font-bold text-slate-900 mb-4">Latest Arrivals</h2>
+                <p class="text-slate-500 max-w-2xl mx-auto">Explore our freshest drops. Handpicked premium quality just
+                    for you.</p>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                @for(product of productsWithWishlist(); track product._id) {
+                <app-product-card [product]="product" [isWishlisted]="product.isWishlisted"
+                    (wishlistToggle)="toggleWishlist($event)">
+                </app-product-card>
+                }
+            </div>
+
+            <div class="text-center mt-16">
+                <a routerLink="/products"
+                    class="inline-flex items-center gap-2 px-8 py-4 bg-slate-900 text-white rounded-2xl font-semibold hover:bg-slate-800 transition-all group">
+                    View Entire Collection
+                    <svg class="w-5 h-5 transition-transform group-hover:translate-x-1" fill="none"
+                        stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Benefits Section -->
+    <section class="py-24">
+        <div class="container mx-auto px-6">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+                @for(feature of features; track $index) {
+                <div
+                    class="p-8 rounded-3xl border border-slate-100 hover:border-primary/20 hover:bg-primary/[0.02] transition-all group">
+                    <div
+                        class="w-16 h-16 bg-slate-50 rounded-2xl flex items-center justify-center text-primary mb-8 group-hover:bg-primary group-hover:text-white transition-colors">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                [attr.d]="feature.icon"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-900 mb-4">{{ feature.title }}</h3>
+                    <p class="text-slate-500 leading-relaxed">{{ feature.description }}</p>
+                </div>
+                }
+            </div>
+        </div>
+    </section>
+
+    <!-- Newsletter / CTA -->
+    <section class="container mx-auto px-6 mb-24">
+        <div class="bg-primary rounded-[3rem] p-12 lg:p-24 relative overflow-hidden">
+            <div class="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]">
+            </div>
+            <div class="relative z-10 text-center max-w-3xl mx-auto">
+                <h2 class="text-4xl lg:text-5xl font-bold text-white mb-8">Ready to start your journey with us?</h2>
+                <p class="text-primary-light/80 text-lg mb-12">Join 50,000+ shoppers and get exclusive access to new
+                    drops and private sales.</p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                    <input type="email" placeholder="Your email address"
+                        class="px-6 py-4 rounded-2xl bg-white/10 border border-white/20 text-white placeholder:text-white/50 focus:outline-none focus:bg-white/20 sm:w-80">
+                    <button
+                        class="px-8 py-4 bg-white text-primary rounded-2xl font-bold hover:bg-slate-50 transition-colors">Subscribe
+                        Now</button>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>

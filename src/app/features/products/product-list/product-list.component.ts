@@ -1,13 +1,14 @@
-import { Component, inject, ChangeDetectionStrategy, computed, signal } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy, computed, signal, OnInit } from '@angular/core';
 import { ProductService } from '../../../core/services/product.service';
 import { WishlistService } from '../../../core/services/wishlist.service';
 import { Product, Category, Brand } from '../../../core/models/api.models';
 import { ProductCardComponent } from '../product-card/product-card.component';
 import { SkeletonLoaderComponent } from '../../../shared/components/skeleton-loader/skeleton-loader.component';
 import { NgClass } from '@angular/common';
-import { FormControl, ReactiveFormsModule } from '@angular/forms'; // Switched to ReactiveFormsModule
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { combineLatest, debounceTime, startWith, BehaviorSubject, switchMap, map } from 'rxjs';
+import { combineLatest, debounceTime, startWith, BehaviorSubject, switchMap, map, take } from 'rxjs';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-product-list',
@@ -17,13 +18,26 @@ import { combineLatest, debounceTime, startWith, BehaviorSubject, switchMap, map
   styleUrls: ['./product-list.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ProductListComponent {
+export class ProductListComponent implements OnInit {
   private productService = inject(ProductService);
   private wishlistService = inject(WishlistService);
+  private route = inject(ActivatedRoute);
 
   // Form Controls
   categoryControl = new FormControl('');
   brandControl = new FormControl('');
+
+  ngOnInit(): void {
+    // Read query params to initialize filters (e.g. from landing page)
+    this.route.queryParams.pipe(take(1)).subscribe(params => {
+      if (params['category']) {
+        this.categoryControl.setValue(params['category']);
+      }
+      if (params['brand']) {
+        this.brandControl.setValue(params['brand']);
+      }
+    });
+  }
 
   // 1. Declarative Data Fetching (Source of Truth)
   private refreshTrigger$ = new BehaviorSubject<void>(undefined);

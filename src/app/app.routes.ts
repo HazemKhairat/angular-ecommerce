@@ -5,7 +5,11 @@ export const routes: Routes = [
         path: '',
         loadComponent: () => import('./core/components/layouts/main-layout/main-layout.component').then(m => m.MainLayoutComponent),
         children: [
-            { path: '', redirectTo: 'products', pathMatch: 'full' },
+            {
+                path: '',
+                loadComponent: () => import('./features/landing-page/landing-page.component').then(m => m.LandingPageComponent),
+                title: 'Home'
+            },
 
             {
                 path: 'products',

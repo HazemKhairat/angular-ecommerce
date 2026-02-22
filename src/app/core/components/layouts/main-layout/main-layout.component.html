@@ -1,16 +1,16 @@
 <app-navbar></app-navbar>
-<main class="min-h-screen pt-20 pb-10">
+<main class="min-h-screen pt-20 pb-10 mx-auto max-w-6xl">
     <router-outlet></router-outlet>
 </main>
 
 @defer(on viewport) {
 <app-footer></app-footer>
 }@placeholder {
-    <div class="h-40 bg-gray-50"></div>
+<div class="h-40 bg-gray-50"></div>
 }
 
 @defer(on idle) {
-    <app-side-cart></app-side-cart>
+<app-side-cart></app-side-cart>
 }@placeholder {
-    <div class="h-40 bg-gray-50"></div>
+<div class="h-40 bg-gray-50"></div>
 }
