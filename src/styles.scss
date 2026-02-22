@@ -1,0 +1,46 @@
+/* 1. Self-hosted Font Definition */
+@font-face {
+    font-family: 'Inter';
+    src: url('./assets/fonts/inter.woff2') format('woff2');
+    font-weight: 100 900;
+    font-display: swap;
+    font-style: normal;
+}
+
+/* 2. Tailwind Core Imports */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* 3. Global Base Styles */
+@layer base {
+
+    html,
+    body {
+        height: 100%;
+    }
+
+    body {
+        /* Standard Tailwind apply works best here within the base layer */
+        @apply bg-slate-50 text-slate-700 font-sans antialiased;
+    }
+}
+
+/* 4. Component-level Styles & Utilities */
+@layer components {
+    ::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        @apply bg-slate-300 rounded-full transition-colors;
+
+        &:hover {
+            @apply bg-slate-400;
+        }
+    }
+}

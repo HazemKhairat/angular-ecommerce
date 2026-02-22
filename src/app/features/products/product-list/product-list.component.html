@@ -1,0 +1,97 @@
+<div class="container mx-auto px-6 py-8">
+
+    <!-- Header -->
+    <div class="flex flex-col md:flex-row md:items-end justify-between mb-10">
+        <div>
+            <h1 class="text-4xl font-bold text-slate-900 tracking-tight mb-2">New Arrivals</h1>
+            <p class="text-slate-500 text-lg">Discover our latest collection of premium products.</p>
+        </div>
+
+        <!-- Filters -->
+        <div class="mt-4 md:mt-0 flex gap-3 flex-wrap">
+            <select [formControl]="categoryControl"
+                class="px-4 py-2 border border-slate-300 rounded-lg bg-white text-slate-600 focus:border-primary outline-none">
+                <option value="">All Categories</option>
+                @for(cat of categories(); track $index) {
+                <option [value]="cat._id">{{ cat.name }}</option>
+                }
+            </select>
+
+            <select [formControl]="brandControl"
+                class="px-4 py-2 border border-slate-300 rounded-lg bg-white text-slate-600 focus:border-primary outline-none">
+                <option value="">All Brands</option>
+                @for(brand of brands(); track $index) {
+                <option [value]="brand._id">{{ brand.name }}</option>
+                }
+            </select>
+        </div>
+    </div>
+
+    <!-- Grid -->
+    <div style="width: 100%; height: 100%;" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        @if(isLoading()) {
+        <div class="contents">
+            @for(item of [1,2,3,4,5,6]; track $index) {
+            <app-skeleton-loader></app-skeleton-loader>
+            }
+        </div>
+        }@else {
+        @for(product of paginatedProducts(); track trackById($index, product); let i = $index) {
+
+        <!-- Immediate Loading for LCP items (First 3) -->
+        @if (i < 3) { <div class="animate-fadeIn">
+            <app-product-card [index]="i" [product]="product" [isWishlisted]="product.isWishlisted"
+                (wishlistToggle)="toggleWishlist($event)"></app-product-card>
+    </div>
+    } @else {
+
+    <!-- Deferred Loading for Below Fold -->
+    @defer (on viewport) {
+    <div class="animate-fadeIn">
+        <app-product-card [index]="i" [product]="product" [isWishlisted]="product.isWishlisted"
+            (wishlistToggle)="toggleWishlist($event)"></app-product-card>
+    </div>
+    } @placeholder {
+    <!-- Simple Placeholder while deferring (prevents layout shift if fast scroll) -->
+    <div class="aspect-[4/5] bg-slate-50 rounded-2xl animate-pulse"></div>
+    }
+
+    }
+    }
+    }
+
+</div>
+
+<!-- Pagination Controls -->
+@if(!isLoading() && totalPages() > 1) {
+<div class="flex justify-center items-center gap-4 mt-12 mb-8">
+    <button (click)="changePage(currentPage() - 1)" [disabled]="currentPage() === 1"
+        class="px-4 py-2 rounded-lg border border-slate-300 text-slate-600 hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
+        Previous
+    </button>
+
+    <div class="flex gap-2">
+        @for(page of [].constructor(totalPages()); track $index; let i = $index) {
+        <button (click)="changePage(i + 1)" [class.bg-primary]="currentPage() === i + 1"
+            [class.text-white]="currentPage() === i + 1" [class.border-primary]="currentPage() === i + 1"
+            [class.text-slate-600]="currentPage() !== i + 1"
+            class="w-10 h-10 rounded-lg border border-slate-300 flex items-center justify-center hover:bg-slate-50 transition-colors">
+            {{ i + 1 }}
+        </button>
+        }
+    </div>
+
+    <button (click)="changePage(currentPage() + 1)" [disabled]="currentPage() === totalPages()"
+        class="px-4 py-2 rounded-lg border border-slate-300 text-slate-600 hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
+        Next
+    </button>
+</div>
+}
+
+@if(!isLoading() && paginatedProducts().length === 0) {
+<div class="text-center py-20">
+    <p class="text-xl text-slate-500">No products found.</p>
+</div>
+}
+
+</div>

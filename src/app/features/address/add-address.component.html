@@ -1,0 +1,40 @@
+<div class="container mx-auto px-4 py-8 max-w-lg">
+    <h1 class="text-2xl font-bold mb-6">Add New Address</h1>
+
+    <form [formGroup]="addressForm" (ngSubmit)="onSubmit()" class="bg-white shadow p-6 rounded-lg">
+        <div class="mb-4">
+            <label class="block text-gray-700 text-sm font-bold mb-2">Alias (e.g., Home, Work)</label>
+            <input formControlName="alias" type="text"
+                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+        </div>
+
+        <div class="mb-4">
+            <label class="block text-gray-700 text-sm font-bold mb-2">Detailed Address</label>
+            <input formControlName="details" type="text"
+                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+        </div>
+
+        <div class="mb-4">
+            <label class="block text-gray-700 text-sm font-bold mb-2">Phone</label>
+            <input formControlName="phone" type="tel"
+                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+        </div>
+
+        <div class="mb-4">
+            <label class="block text-gray-700 text-sm font-bold mb-2">City</label>
+            <input formControlName="city" type="text"
+                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+        </div>
+
+        <div class="mb-6">
+            <label class="block text-gray-700 text-sm font-bold mb-2">Postal Code</label>
+            <input formControlName="postalCode" type="text"
+                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+        </div>
+
+        <button type="submit" [disabled]="addressForm.invalid || isLoading"
+            class="bg-blue-600 text-white font-bold py-2 px-4 rounded w-full hover:bg-blue-700 disabled:bg-gray-400">
+            {{ isLoading ? 'Saving...' : 'Save Address' }}
+        </button>
+    </form>
+</div>

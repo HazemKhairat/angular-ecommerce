@@ -1,0 +1,42 @@
+<div class="container mx-auto px-4 py-8">
+    <div class="flex justify-between items-center mb-6">
+        <h1 class="text-3xl font-bold">My Addresses</h1>
+        <a routerLink="/address/add" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Add Address</a>
+    </div>
+
+    @if(loading){
+    <div class="text-center py-10">
+        <p>Loading addresses...</p>
+    </div>
+    }
+
+    @if(!loading && addresses.length === 0){
+    <div class="text-center py-10 border rounded bg-gray-50">
+        <p class="text-gray-600 text-lg">No addresses found.</p>
+    </div>
+    }
+
+    @if(!loading && addresses.length > 0){
+    <div class="grid gap-4">
+        @for(address of addresses; track address._id){
+        <div class="border p-4 rounded shadow-sm flex justify-between items-start bg-white">
+
+            <div>
+                <h3 class="font-bold text-lg mb-1">{{ address.alias }}</h3>
+                <p class="text-gray-700">{{ address.details }}</p>
+                <p class="text-gray-600">{{ address.city }}
+                    @if (address.postalCode) {
+                    <span>- {{ address.postalCode }}</span>
+                    }
+                </p>
+                <p class="text-gray-600">Phone: {{ address.phone }}</p>
+            </div>
+            <button (click)="removeAddress(address._id!)"
+                class="text-red-500 hover:text-red-700 text-sm font-semibold border border-red-200 px-3 py-1 rounded hover:bg-red-50">
+                Remove
+            </button>
+        </div>
+        }
+    </div>
+    }
+</div>

@@ -1,0 +1,10 @@
+<app-navbar></app-navbar>
+<main class="min-h-screen pt-24 pb-10 flex items-center justify-center bg-gray-50">
+    <router-outlet></router-outlet>
+</main>
+
+@defer(on idle) {
+<app-footer></app-footer>
+}@placeholder {
+    <div class="h-20"></div>
+}
