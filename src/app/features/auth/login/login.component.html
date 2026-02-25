@@ -1,8 +1,14 @@
 <div class="animate-fade-in">
     <div class="mb-10 text-left">
-        <h2 class="text-4xl font-bold text-slate-900 tracking-tight mb-3">Welcome back Hazem</h2>
+        <h2 class="text-4xl font-bold text-slate-900 tracking-tight mb-3">Welcome back</h2>
         <p class="text-slate-500 text-lg">Please enter your details to sign in.</p>
     </div>
+
+    @if(apiError){
+    <div class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 border border-red-200 animate-shake" role="alert">
+        <span class="font-medium">Error!</span> {{apiError}}
+    </div>
+    }
 
     <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="space-y-5">
         <!-- Email -->
@@ -18,9 +24,21 @@
                     </svg>
                 </div>
                 <input type="email" formControlName="email"
+                    [class.border-red-500]="loginForm.get('email')?.invalid && loginForm.get('email')?.touched"
                     class="w-full pl-11 pr-4 py-3.5 bg-white rounded-2xl border border-slate-200 focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all outline-none text-slate-900 placeholder:text-slate-400"
                     placeholder="Enter your email">
             </div>
+            @if(loginForm.get('email')?.invalid && loginForm.get('email')?.touched){
+            <div class="flex items-center gap-1.5 px-1 mt-1 text-xs text-red-500 font-medium animate-fade-in">
+                <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd"
+                        d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
+                        clip-rule="evenodd"></path>
+                </svg>
+                @if(loginForm.get('email')?.errors?.['required']){ Email is required }
+                @else if(loginForm.get('email')?.errors?.['email']){ Please enter a valid email }
+            </div>
+            }
         </div>
 
         <!-- Password -->
@@ -40,9 +58,20 @@
                     </svg>
                 </div>
                 <input type="password" formControlName="password"
+                    [class.border-red-500]="loginForm.get('password')?.invalid && loginForm.get('password')?.touched"
                     class="w-full pl-11 pr-4 py-3.5 bg-white rounded-2xl border border-slate-200 focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all outline-none text-slate-900 placeholder:text-slate-400"
                     placeholder="••••••••">
             </div>
+            @if(loginForm.get('password')?.invalid && loginForm.get('password')?.touched){
+            <div class="flex items-center gap-1.5 px-1 mt-1 text-xs text-red-500 font-medium animate-fade-in">
+                <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd"
+                        d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
+                        clip-rule="evenodd"></path>
+                </svg>
+                Password is required
+            </div>
+            }
         </div>
 
         <button type="submit" [disabled]="loginForm.invalid || isLoading"

@@ -4,6 +4,12 @@
         <p class="text-slate-500 text-lg">Join us and start your premium journey today.</p>
     </div>
 
+    @if(apiError){
+    <div class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 border border-red-200 animate-shake" role="alert">
+        <span class="font-medium">Error!</span> {{apiError}}
+    </div>
+    }
+
     <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="space-y-3">
         <!-- Name -->
         <div class="space-y-1">
@@ -17,9 +23,19 @@
                     </svg>
                 </div>
                 <input type="text" formControlName="name"
+                    [class.border-red-500]="registerForm.get('name')?.invalid && registerForm.get('name')?.touched"
                     class="w-full pl-11 pr-4 py-3 bg-white rounded-2xl border border-slate-200 focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all outline-none text-slate-900 placeholder:text-slate-400"
                     placeholder="e.g. John Doe">
             </div>
+            @if(registerForm.get('name')?.invalid && registerForm.get('name')?.touched){
+            <div class="flex items-center gap-1.5 px-1 mt-1 text-xs text-red-500 font-medium animate-fade-in">
+                <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+                </svg>
+                @if(registerForm.get('name')?.errors?.['required']){ Name is required }
+                @if(registerForm.get('name')?.errors?.['minlength']){ Name must be at least 3 characters }
+            </div>
+            }
         </div>
 
         <!-- Email -->
@@ -35,9 +51,19 @@
                     </svg>
                 </div>
                 <input type="email" formControlName="email"
+                    [class.border-red-500]="registerForm.get('email')?.invalid && registerForm.get('email')?.touched"
                     class="w-full pl-11 pr-4 py-3 bg-white rounded-2xl border border-slate-200 focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all outline-none text-slate-900 placeholder:text-slate-400"
                     placeholder="Enter your email">
             </div>
+            @if(registerForm.get('email')?.invalid && registerForm.get('email')?.touched){
+            <div class="flex items-center gap-1.5 px-1 mt-1 text-xs text-red-500 font-medium animate-fade-in">
+                <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+                </svg>
+                @if(registerForm.get('email')?.errors?.['required']){ Email is required }
+                @else if(registerForm.get('email')?.errors?.['email']){ Please enter a valid email }
+            </div>
+            }
         </div>
 
         <!-- Phone -->
@@ -53,9 +79,18 @@
                     </svg>
                 </div>
                 <input type="tel" formControlName="phone"
+                    [class.border-red-500]="registerForm.get('phone')?.invalid && registerForm.get('phone')?.touched"
                     class="w-full pl-11 pr-4 py-3 bg-white rounded-2xl border border-slate-200 focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all outline-none text-slate-900 placeholder:text-slate-400"
                     placeholder="e.g. 0123456789">
             </div>
+            @if(registerForm.get('phone')?.invalid && registerForm.get('phone')?.touched){
+            <div class="flex items-center gap-1.5 px-1 mt-1 text-xs text-red-500 font-medium animate-fade-in">
+                <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+                </svg>
+                Phone number is required (Egyptian format)
+            </div>
+            }
         </div>
 
         <!-- Passwords Grid -->
@@ -73,9 +108,18 @@
                         </svg>
                     </div>
                     <input type="password" formControlName="password"
+                        [class.border-red-500]="registerForm.get('password')?.invalid && registerForm.get('password')?.touched"
                         class="w-full pl-11 pr-4 py-3 bg-white rounded-2xl border border-slate-200 focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all outline-none text-slate-900 placeholder:text-slate-400"
                         placeholder="••••••••">
                 </div>
+                @if(registerForm.get('password')?.invalid && registerForm.get('password')?.touched){
+                <div class="flex items-center gap-1.5 px-1 mt-1 text-xs text-red-500 font-medium animate-fade-in">
+                    <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+                    </svg>
+                    Password must start with Upper Case then 5-10 chars
+                </div>
+                }
             </div>
 
             <!-- RePassword -->
@@ -91,9 +135,18 @@
                         </svg>
                     </div>
                     <input type="password" formControlName="rePassword"
+                        [class.border-red-500]="registerForm.get('rePassword')?.invalid && registerForm.get('rePassword')?.touched"
                         class="w-full pl-11 pr-4 py-3 bg-white rounded-2xl border border-slate-200 focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all outline-none text-slate-900 placeholder:text-slate-400"
                         placeholder="••••••••">
                 </div>
+                @if(registerForm.get('rePassword')?.invalid && registerForm.get('rePassword')?.touched){
+                <div class="flex items-center gap-1.5 px-1 mt-1 text-xs text-red-500 font-medium animate-fade-in">
+                    <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+                    </svg>
+                    Verification is required
+                </div>
+                }
             </div>
         </div>
 

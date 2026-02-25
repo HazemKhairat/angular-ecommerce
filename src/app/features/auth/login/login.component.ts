@@ -19,6 +19,7 @@ export class LoginComponent {
   private cdr = inject(ChangeDetectorRef);
   private destroyRef = inject(DestroyRef);
   isLoading = false;
+  apiError: string = '';
 
   loginForm = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email]),
@@ -28,6 +29,7 @@ export class LoginComponent {
   onSubmit() {
     if (this.loginForm.valid) {
       this.isLoading = true;
+      this.apiError = '';
       this.authService.login(this.loginForm.value).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
         next: (res) => {
           this.isLoading = false;
@@ -40,8 +42,8 @@ export class LoginComponent {
         },
         error: (err) => {
           this.isLoading = false;
+          this.apiError = err.error.message || 'Login failed';
           this.cdr.markForCheck();
-          alert(err.error.message || 'Login failed');
         }
       });
     }

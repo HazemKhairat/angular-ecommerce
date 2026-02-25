@@ -10,8 +10,10 @@
             <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm flex items-center gap-6">
                 <!-- Image -->
                 <div class="w-24 h-24 bg-slate-50 rounded-xl overflow-hidden flex-shrink-0">
+                    @if(item.product.imageCover) {
                     <img [ngSrc]="item.product.imageCover" width="96" height="96" class="w-full h-full object-cover"
                         [priority]="$index < 4">
+                    }
                 </div>
 
                 <!-- Info -->

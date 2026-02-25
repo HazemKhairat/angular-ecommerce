@@ -44,19 +44,28 @@ export class CartService {
             this.baseUrl,
             { productId }
         ).pipe(
-            tap(res => this.setCart(res.data))
+            tap(res => {
+                this.setCart(res.data);
+                this.refreshCart(); // Refresh to get populated product data
+            })
         );
     }
 
     removeCartItem(id: string): Observable<{ status: string; numOfCartItems: number; data: Cart }> {
         return this.http.delete<{ status: string; numOfCartItems: number; data: Cart }>(`${this.baseUrl}/${id}`).pipe(
-            tap(res => this.setCart(res.data))
+            tap(res => {
+                this.setCart(res.data);
+                this.refreshCart(); // Refresh to ensure data consistency
+            })
         );
     }
 
     updateCartItemQuantity(id: string, count: number): Observable<{ status: string; numOfCartItems: number; data: Cart }> {
         return this.http.put<{ status: string; numOfCartItems: number; data: Cart }>(`${this.baseUrl}/${id}`, { count }).pipe(
-            tap(res => this.setCart(res.data))
+            tap(res => {
+                this.setCart(res.data);
+                this.refreshCart(); // Refresh to get populated product data
+            })
         );
     }
 

@@ -15,4 +15,5 @@ import { LayoutService } from '../../../core/services/layout.service';
 export class SideCartComponent {
   layoutService = inject(LayoutService);
   cartService = inject(CartService);
+  
 }

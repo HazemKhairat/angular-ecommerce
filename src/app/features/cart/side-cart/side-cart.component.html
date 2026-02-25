@@ -28,8 +28,10 @@
             @for(item of cart.products; track item.product._id) {
             <div class="flex items-center gap-4 group">
                 <div class="w-16 h-16 bg-slate-50 rounded-lg overflow-hidden flex-shrink-0">
+                    @if(item.product.imageCover) {
                     <img [ngSrc]="item.product.imageCover" width="64" height="64" class="w-full h-full object-cover"
                         [priority]="$index < 4">
+                    }
                 </div>
                 <div class="flex-1 min-w-0">
                     <h4 class="text-sm font-bold text-slate-800 truncate">{{ item.product.title }}</h4>

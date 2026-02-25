@@ -19,6 +19,7 @@ export class SignupComponent {
   private cdr = inject(ChangeDetectorRef);
   private destroyRef = inject(DestroyRef);
   isLoading = false;
+  apiError: string = '';
 
   registerForm = new FormGroup({
     name: new FormControl('', [Validators.required, Validators.minLength(3)]),
@@ -31,10 +32,11 @@ export class SignupComponent {
   onSubmit() {
     if (this.registerForm.valid) {
       if (this.registerForm.value.password !== this.registerForm.value.rePassword) {
-        alert("Passwords do not match"); // Simple validation
+        this.apiError = "Passwords do not match";
         return;
       }
       this.isLoading = true;
+      this.apiError = '';
       this.authService.register(this.registerForm.value).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
         next: (res) => {
           this.isLoading = false;
@@ -45,8 +47,8 @@ export class SignupComponent {
         },
         error: (err) => {
           this.isLoading = false;
+          this.apiError = err.error.message || 'Registration failed';
           this.cdr.markForCheck();
-          alert(err.error.message || 'Registration failed');
         }
       });
     }

@@ -1,4 +1,4 @@
-import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy, OnInit } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { CartService } from '../../services/cart.service';
@@ -14,9 +14,13 @@ import { AsyncPipe } from '@angular/common';
   styleUrls: ['./navbar.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class NavbarComponent {
+export class NavbarComponent implements OnInit {
   authService = inject(AuthService);
   cartService = inject(CartService);
   wishlistService = inject(WishlistService);
   layoutService = inject(LayoutService);
+
+  ngOnInit(): void {
+    this.cartService.refreshCart();
+  }
 }
