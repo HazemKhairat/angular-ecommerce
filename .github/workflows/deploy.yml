@@ -34,7 +34,7 @@ jobs:
       - name: Install and Build 🔧
         run: |
           npm ci
-          npm run build -- --base-href /angular-ecommerce/
+          npm run build -- --configuration production --base-href /angular-ecommerce/
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
