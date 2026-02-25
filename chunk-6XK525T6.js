@@ -1,0 +1,1 @@
+import{Q as r,j as e}from"./chunk-2I6WSUOP.js";var a=class t{isCartOpen=new e(!1);toggleCart(){this.isCartOpen.next(!this.isCartOpen.value)}openCart(){this.isCartOpen.next(!0)}closeCart(){this.isCartOpen.next(!1)}static \u0275fac=function(o){return new(o||t)};static \u0275prov=r({token:t,factory:t.\u0275fac,providedIn:"root"})};export{a};
