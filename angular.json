@@ -50,13 +50,14 @@
                 "glob": "**/*",
                 "input": "public"
               },
-              "src/assets"
+              "src/assets",
+              "src/404.html"
             ],
             "styles": [
               "src/styles.scss"
             ],
             "scripts": [],
-            "baseHref": "/angular-ecommerce/" 
+            "baseHref": "/angular-ecommerce/"
           },
           "configurations": {
             "production": {
