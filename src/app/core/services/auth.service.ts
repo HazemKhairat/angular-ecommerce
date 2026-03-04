@@ -42,7 +42,10 @@ export class AuthService {
                     // Map decoded token strictly to User interface if needed, 
                     // or just store what we have. API usually returns simplified data in token.
                     // For now, we'll assume the decoded token has name/id/role.
-                    this.userData.next(decoded);
+                    this.userData.next({
+                        ...decoded,
+                        _id: decoded.id || decoded._id
+                    });
                 } catch (e) {
                     this.logout();
                 }

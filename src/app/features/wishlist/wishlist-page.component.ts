@@ -1,5 +1,6 @@
-import { Component, OnInit, inject, ChangeDetectionStrategy, ChangeDetectorRef, DestroyRef } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectionStrategy, ChangeDetectorRef, DestroyRef, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { finalize } from 'rxjs';
 import { CurrencyPipe, NgOptimizedImage } from '@angular/common';
 import { WishlistService } from '../../core/services/wishlist.service';
 import { Product } from '../../core/models/api.models';
@@ -21,6 +22,7 @@ export class WishlistPageComponent implements OnInit {
 
   products: Product[] = [];
   loading = true;
+  updatingItems = signal<Set<string>>(new Set<string>());
 
   ngOnInit(): void {
     this.loadWishlist();
@@ -43,7 +45,24 @@ export class WishlistPageComponent implements OnInit {
   }
 
   removeFromWishlist(id: string) {
-    this.wishlistService.removeFromWishlist(id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
+    if (this.updatingItems().has(id)) return;
+
+    this.updatingItems.update(set => {
+      const newSet = new Set(set);
+      newSet.add(id);
+      return newSet;
+    });
+
+    this.wishlistService.removeFromWishlist(id).pipe(
+      takeUntilDestroyed(this.destroyRef),
+      finalize(() => {
+        this.updatingItems.update(set => {
+          const newSet = new Set(set);
+          newSet.delete(id);
+          return newSet;
+        });
+      })
+    ).subscribe({
       next: () => {
         // Optimistically remove from local list or reload. Reloading is safer for now.
         // Or better:
@@ -54,7 +73,24 @@ export class WishlistPageComponent implements OnInit {
   }
 
   addToCart(id: string) {
-    this.cartService.addToCart(id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
+    if (this.updatingItems().has(id)) return;
+
+    this.updatingItems.update(set => {
+      const newSet = new Set(set);
+      newSet.add(id);
+      return newSet;
+    });
+
+    this.cartService.addToCart(id).pipe(
+      takeUntilDestroyed(this.destroyRef),
+      finalize(() => {
+        this.updatingItems.update(set => {
+          const newSet = new Set(set);
+          newSet.delete(id);
+          return newSet;
+        });
+      })
+    ).subscribe({
       next: () => {
         alert('Product added to cart');
       }

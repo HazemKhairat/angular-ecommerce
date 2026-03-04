@@ -1,5 +1,6 @@
-import { Component, inject, OnInit, ChangeDetectionStrategy, ChangeDetectorRef, DestroyRef } from '@angular/core';
+import { Component, inject, OnInit, ChangeDetectionStrategy, ChangeDetectorRef, DestroyRef, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { finalize } from 'rxjs';
 import { CartService } from '../../../core/services/cart.service';
 import { Cart } from '../../../core/models/api.models';
 import { CurrencyPipe, NgOptimizedImage } from '@angular/common';
@@ -19,6 +20,8 @@ export class CartPageComponent implements OnInit {
   private destroyRef = inject(DestroyRef);
   loader = this.cartService.getLoggedUserCart().pipe(takeUntilDestroyed(this.destroyRef)).subscribe();
 
+  updatingItems = signal<Set<string>>(new Set<string>());
+
   ngOnInit() {
     // Just ensure we have valid data if not loaded? 
     // Actually loader property subscription usually enough but we might want error handling.
@@ -29,12 +32,42 @@ export class CartPageComponent implements OnInit {
   }
 
   updateCount(id: string, count: number) {
-    if (count > 0) {
-      this.cartService.updateCartItemQuantity(id, count).pipe(takeUntilDestroyed(this.destroyRef)).subscribe();
+    if (count > 0 && !this.updatingItems().has(id)) {
+      this.updatingItems.update(set => {
+        const newSet = new Set(set);
+        newSet.add(id);
+        return newSet;
+      });
+      this.cartService.updateCartItemQuantity(id, count).pipe(
+        takeUntilDestroyed(this.destroyRef),
+        finalize(() => {
+          this.updatingItems.update(set => {
+            const newSet = new Set(set);
+            newSet.delete(id);
+            return newSet;
+          });
+        })
+      ).subscribe();
     }
   }
 
   removeItem(id: string) {
-    this.cartService.removeCartItem(id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe();
+    if (!this.updatingItems().has(id)) {
+      this.updatingItems.update(set => {
+        const newSet = new Set(set);
+        newSet.add(id);
+        return newSet;
+      });
+      this.cartService.removeCartItem(id).pipe(
+        takeUntilDestroyed(this.destroyRef),
+        finalize(() => {
+          this.updatingItems.update(set => {
+            const newSet = new Set(set);
+            newSet.delete(id);
+            return newSet;
+          });
+        })
+      ).subscribe();
+    }
   }
 }

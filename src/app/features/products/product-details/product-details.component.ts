@@ -1,5 +1,6 @@
-import { Component, OnInit, inject, ChangeDetectionStrategy, ChangeDetectorRef, DestroyRef } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectionStrategy, ChangeDetectorRef, DestroyRef, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { finalize } from 'rxjs';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { ProductService } from '../../../core/services/product.service';
 import { CartService } from '../../../core/services/cart.service';
@@ -27,6 +28,7 @@ export class ProductDetailsComponent implements OnInit {
     isLoading = true;
     quantity = 1;
     isWishlisted = false;
+    isAddingToCart = signal(false);
 
     ngOnInit() {
         this.route.params.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(params => {
@@ -62,12 +64,18 @@ export class ProductDetailsComponent implements OnInit {
     }
 
     addToCart() {
-        if (!this.product) return;
+        if (!this.product || this.isAddingToCart()) return;
+        this.isAddingToCart.set(true);
         // The API addToCart doesn't take quantity directly usually in this schema, 
         // it's usually 1 item per call or we'd need to loop or use update.
         // For now we'll just add it once and then maybe update quantity if needed.
         // Actually, most simple APIs just add 1.
-        this.cartService.addToCart(this.product._id).subscribe({
+        this.cartService.addToCart(this.product._id).pipe(
+            finalize(() => {
+                this.isAddingToCart.set(false);
+                this.cdr.markForCheck();
+            })
+        ).subscribe({
             next: (res) => {
                 if (res.status === 'success') {
                     // State updated automatically by signal

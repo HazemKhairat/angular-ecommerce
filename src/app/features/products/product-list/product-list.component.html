@@ -41,7 +41,8 @@
         <!-- Immediate Loading for LCP items (First 3) -->
         @if (i < 3) { <div class="animate-fadeIn">
             <app-product-card [index]="i" [product]="product" [isWishlisted]="product.isWishlisted"
-                (wishlistToggle)="toggleWishlist($event)"></app-product-card>
+                (wishlistToggle)="toggleWishlist($event)"
+                [isWishlistUpdating]="updatingWishlistItems().has(product._id)"></app-product-card>
     </div>
     } @else {
 
@@ -49,7 +50,8 @@
     @defer (on viewport) {
     <div class="animate-fadeIn">
         <app-product-card [index]="i" [product]="product" [isWishlisted]="product.isWishlisted"
-            (wishlistToggle)="toggleWishlist($event)"></app-product-card>
+            (wishlistToggle)="toggleWishlist($event)"
+            [isWishlistUpdating]="updatingWishlistItems().has(product._id)"></app-product-card>
     </div>
     } @placeholder {
     <!-- Simple Placeholder while deferring (prevents layout shift if fast scroll) -->

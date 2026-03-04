@@ -1,10 +1,10 @@
-import { Component, inject, computed } from '@angular/core';
+import { Component, inject, computed, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { ProductService } from '../../core/services/product.service';
 import { WishlistService } from '../../core/services/wishlist.service';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { map } from 'rxjs';
+import { map, finalize } from 'rxjs';
 import { ProductCardComponent } from '../products/product-card/product-card.component';
 
 @Component({
@@ -59,6 +59,7 @@ export class LandingPageComponent {
     private wishlistIds = toSignal(this.wishlistService.wishlistList, { initialValue: [] as string[] });
 
     private wishlistSet = computed(() => new Set(this.wishlistIds()));
+    updatingWishlistItems = signal<Set<string>>(new Set<string>());
 
     // 5. Map Products with Wishlist Status
     productsWithWishlist = computed(() => {
@@ -77,10 +78,26 @@ export class LandingPageComponent {
     ];
 
     toggleWishlist(id: string) {
+        if (this.updatingWishlistItems().has(id)) return;
+
+        this.updatingWishlistItems.update(set => {
+            const newSet = new Set(set);
+            newSet.add(id);
+            return newSet;
+        });
+
+        const finalizeOp = finalize(() => {
+            this.updatingWishlistItems.update(set => {
+                const newSet = new Set(set);
+                newSet.delete(id);
+                return newSet;
+            });
+        });
+
         if (this.wishlistSet().has(id)) {
-            this.wishlistService.removeFromWishlist(id).subscribe();
+            this.wishlistService.removeFromWishlist(id).pipe(finalizeOp).subscribe();
         } else {
-            this.wishlistService.addToWishlist(id).subscribe();
+            this.wishlistService.addToWishlist(id).pipe(finalizeOp).subscribe();
         }
     }
 }

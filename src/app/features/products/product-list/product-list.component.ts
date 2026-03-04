@@ -7,7 +7,7 @@ import { SkeletonLoaderComponent } from '../../../shared/components/skeleton-loa
 import { NgClass } from '@angular/common';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { combineLatest, debounceTime, startWith, BehaviorSubject, switchMap, map, take } from 'rxjs';
+import { combineLatest, debounceTime, startWith, BehaviorSubject, switchMap, map, take, finalize } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
@@ -70,6 +70,8 @@ export class ProductListComponent implements OnInit {
     return new Set(ids);
   });
 
+  updatingWishlistItems = signal<Set<string>>(new Set<string>());
+
   // Filter Stream
   private filterState = toSignal(
     combineLatest([
@@ -126,11 +128,26 @@ export class ProductListComponent implements OnInit {
   }
 
   toggleWishlist(id: string) {
-    // Current logic requires checking imperative state, but we can check our optimize Set
+    if (this.updatingWishlistItems().has(id)) return;
+
+    this.updatingWishlistItems.update(set => {
+      const newSet = new Set(set);
+      newSet.add(id);
+      return newSet;
+    });
+
+    const finalizeOp = finalize(() => {
+      this.updatingWishlistItems.update(set => {
+        const newSet = new Set(set);
+        newSet.delete(id);
+        return newSet;
+      });
+    });
+
     if (this.wishlistSet().has(id)) {
-      this.wishlistService.removeFromWishlist(id).subscribe();
+      this.wishlistService.removeFromWishlist(id).pipe(finalizeOp).subscribe();
     } else {
-      this.wishlistService.addToWishlist(id).subscribe();
+      this.wishlistService.addToWishlist(id).pipe(finalizeOp).subscribe();
     }
   }
 
